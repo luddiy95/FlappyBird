@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 
     public GameObject GameOver;
 
-    int myRecord;
+    public static int myRecord;
     public GameObject TextMyRecord;
     public GameObject TextBestRecord;
 
@@ -42,25 +42,11 @@ public class GameManager : MonoBehaviour {
     {
         if(Bird.deathzoneCol == false)
         {
-            float headX = Pypes.Peek().transform.position.x;
-            if (-2f - 0.01f < headX && headX <= -2f)
-            {
-                Pypes.Dequeue();
-                float tailX = headX + PypeInterval * (PypesNm - 1);
-                int r = Random.Range(0, 9);
-                float ty = -0.4f + (float)r / 10f;
-                Pypes.Enqueue(Instantiate(Pype, new Vector3(tailX + PypeInterval, ty, 0f), Quaternion.identity));
-            }
             foreach (GameObject pype in Pypes)
             {
                 pype.transform.position += new Vector3(-0.01f, 0f, 0f);
-                float tx = pype.transform.position.x;
-                if(0f - 0.01f < tx && tx <= 0f)
-                {
-                    ++myRecord;
-                    TextMyRecord.GetComponent<Text>().text = "MyRecord: " + myRecord;
-                }
             }
+            TextMyRecord.GetComponent<Text>().text = "MyRecord: " + myRecord;
         }
         else
         {
@@ -72,6 +58,16 @@ public class GameManager : MonoBehaviour {
             }
         }
 	}
+
+    public void DestroyPype()
+    {
+        float headX = Pypes.Peek().transform.position.x;
+        Destroy(Pypes.Dequeue());
+        float tailX = headX + PypeInterval * (PypesNm - 1);
+        int r = Random.Range(0, 9);
+        float ty = -0.4f + (float)r / 10f;
+        Pypes.Enqueue(Instantiate(Pype, new Vector3(tailX + PypeInterval, ty, 0f), Quaternion.identity));
+    }
 
 
     public void ReTry()

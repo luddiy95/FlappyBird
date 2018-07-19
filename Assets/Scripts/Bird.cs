@@ -29,8 +29,16 @@ public class Bird : MonoBehaviour {
         if(col.gameObject.tag == "deathzone")
         {
             deathzoneCol = true;
+            this.GetComponent<Rigidbody2D>().isKinematic = true;
             this.GetComponent<Rigidbody2D>().velocity = new Vector2(0f, 0f);
-            this.GetComponent<Rigidbody2D>().gravityScale = 0f;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.gameObject.tag == "PypePathZone")
+        {
+            ++GameManager.myRecord;
         }
     }
 }
